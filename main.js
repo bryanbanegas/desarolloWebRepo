@@ -27,6 +27,8 @@ function deleteLast() {
   input.value = input.value.slice(0, -1);
 }
 
+
+
 function Calc() {
   const app = document.getElementById("app");
 
@@ -60,6 +62,7 @@ function Calc() {
             <div>
                 <button onClick="clearInput()">AC</button>
                 <button class="signo" onClick="calculate()">=</button>
+                <button onClick="deleteLast()">←</button>
             </div>
         </div>
     `;
