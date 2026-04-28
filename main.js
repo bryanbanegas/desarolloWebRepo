@@ -1,17 +1,60 @@
-function addToInput(add){
-    const input=document.getElementById("ecuacion");
-    input.value+=add;
+function getInput() {
+  return document.getElementById("ecuacion");
 }
 
-function clearInput(){
-    const input=document.getElementById("ecuacion");
-    input.value="";
+//Modifique el addInput para que no te deje ingresar operadores repetidos
+function addToInput(value) {
+  const input = getInput();
+
+  const lastChar = input.value.slice(-1);
+  const operators = ["+", "-", "*", "/"];
+
+  if (operators.includes(lastChar) && operators.includes(value)) {
+    return; // no ingresa nada porque es el mismo operador que el anterior ingresado
+  }
+
+  input.value += value;
 }
 
-function Calc(){
-    const app=document.getElementById("app");
+// Limpiar todo
+function clearInput() {
+  getInput().value = "";
+}
 
-    app.innerHTML=`
+// Borra el ultimo caracter ingresado
+function deleteLast() {
+  const input = getInput();
+  input.value = input.value.slice(0, -1);
+}
+
+// Aplicando lo aprendido en Compi
+function isValidExpression(expr) {
+  // Solo permite numeros, operadores y parentesis
+  return /^[0-9+\-*/().\s]+$/.test(expr);
+}
+
+//Todas las funciones de calcular estan aqui
+function calculate() {
+  const input = getInput();
+  let expr = input.value;
+ 
+  if (!isValidExpression(expr)) {
+    input.value = "Error";
+    return;
+  }
+ 
+  try {
+    const result = Function(`"use strict"; return (${expr})`)();
+    input.value = parseFloat(result.toFixed(10)).toString();
+  } catch (error) {
+    input.value = "Error";
+  }
+}
+
+function Calc() {
+  const app = document.getElementById("app");
+
+  app.innerHTML = `
         <div>
             <input id="ecuacion" type="text" style="font-size: 50px" readonly>
             <div>
@@ -40,10 +83,17 @@ function Calc(){
             </div>
             <div>
                 <button onClick="clearInput()">AC</button>
-                <button class="signo">=</button>
+                <button class="signo" onClick="calculate()">=</button>
+                <button onClick="deleteLast()">←</button>
             </div>
         </div>
     `;
 }
+
+// Exponer funciones al scope global para que los onClick del HTML funcionen
+window.addToInput = addToInput;
+window.clearInput = clearInput;
+window.deleteLast = deleteLast;
+window.calculate = calculate;
 
 Calc();
