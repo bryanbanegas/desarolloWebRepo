@@ -27,7 +27,29 @@ function deleteLast() {
   input.value = input.value.slice(0, -1);
 }
 
+// Aplicando lo aprendido en Compi
+function isValidExpression(expr) {
+  // Solo permite numeros, operadores y parentesis
+  return /^[0-9+\-*/().\s]+$/.test(expr);
+}
 
+//Todas las funciones de calcular estan aqui
+function calculate() {
+  const input = getInput();
+  let expr = input.value;
+ 
+  if (!isValidExpression(expr)) {
+    input.value = "Error";
+    return;
+  }
+ 
+  try {
+    const result = Function(`"use strict"; return (${expr})`)();
+    input.value = parseFloat(result.toFixed(10)).toString();
+  } catch (error) {
+    input.value = "Error";
+  }
+}
 
 function Calc() {
   const app = document.getElementById("app");
@@ -72,6 +94,6 @@ function Calc() {
 window.addToInput = addToInput;
 window.clearInput = clearInput;
 window.deleteLast = deleteLast;
-
+window.calculate = calculate;
 
 Calc();
