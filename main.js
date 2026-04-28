@@ -21,6 +21,12 @@ function clearInput() {
   getInput().value = "";
 }
 
+// Borra el ultimo caracter ingresado
+function deleteLast() {
+  const input = getInput();
+  input.value = input.value.slice(0, -1);
+}
+
 function Calc() {
   const app = document.getElementById("app");
 
